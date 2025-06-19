@@ -1,23 +1,34 @@
-let rotatingLine;
-
+let rotatingLine1;
+let rotatingLine2;
 function setup() {
   createCanvas(400, 400);
   angleMode(DEGREES); // 角度は度数法
 
   // クラスのインスタンス作成
-  rotatingLine = new RotatingLine(
-    200, 200, // 中心点
-    120, // 線の長さ
+  rotatingLine1 = new RotatingLine(
+    100, 200, // 中心点
+    60, // 線の長さ
     color(255, 0, 0), // 色
-    1, // 時計回り
+    1, // 回転方向
+    2 // 回転速度
+  );
+
+  // クラスのインスタンス作成
+  rotatingLine2 = new RotatingLine(
+    300, 200, // 中心点
+    60, // 線の長さ
+    color(255, 0, 0), // 色
+    -1, // 回転方向
     2 // 回転速度
   );
 }
 
 function draw() {
   background(240);
-  rotatingLine.update();
-  rotatingLine.display();
+  rotatingLine1.update();
+  rotatingLine1.display();
+  rotatingLine2.update();
+  rotatingLine2.display();
 }
 
 class RotatingLine {
