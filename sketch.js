@@ -23,6 +23,8 @@ function setup() {
         -1, // 回転方向
         1 // 回転速度
     );
+
+
 }
 
 function draw() {
@@ -32,9 +34,13 @@ function draw() {
     rotatingLine2.update();
     rotatingLine2.display();
 
-
     let end1 = rotatingLine1.getEndPoint();
     let end2 = rotatingLine2.getEndPoint();
+
+    stroke("green");
+    strokeWeight(2);
+    line(end1.x, end1.y, end1.x + 150, end1.y - 150);
+    line(end2.x, end2.y, end2.x - 150, end2.y - 150);
 
     fill(0);
     noStroke();
