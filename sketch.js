@@ -19,7 +19,7 @@ function setup() {
     60, // 線の長さ
     color(255, 0, 0), // 色
     -1, // 回転方向
-    2 // 回転速度
+    1 // 回転速度
   );
 }
 
@@ -29,6 +29,15 @@ function draw() {
   rotatingLine1.display();
   rotatingLine2.update();
   rotatingLine2.display();
+
+
+  let end1 = rotatingLine1.getEndPoint();
+  let end2 = rotatingLine2.getEndPoint();
+
+  fill(0);
+  noStroke();
+  ellipse(end1.x, end1.y, 10, 10);
+  ellipse(end2.x, end2.y, 10, 10);
 }
 
 class RotatingLine {
@@ -54,5 +63,11 @@ class RotatingLine {
     strokeWeight(2);
     line(0, 0, this.length, 0);
     pop();
+  }
+
+  getEndPoint() {
+    let x = this.cx + cos(this.angle) * this.length;
+    let y = this.cy + sin(this.angle) * this.length;
+    return createVector(x, y);
   }
 }
