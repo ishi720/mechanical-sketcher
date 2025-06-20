@@ -2,8 +2,6 @@
 
 let rotatingLine1;
 let rotatingLine2;
-
-// 緑の棒
 let connectingLine1;
 let connectingLine2;
 
@@ -11,24 +9,11 @@ function setup() {
     createCanvas(400, 400);
     angleMode(DEGREES);
 
-    rotatingLine1 = new RotatingLine(
-        100, 200, // 中心点
-        60, // 長さ
-        color(255, 0, 0), // 色
-        1, // 回転方向
-        2.4 // 回転速度
-    );
+    rotatingLine1 = new RotatingLine(100, 200, 60, color(255, 0, 0), 1, 2.4);
+    rotatingLine2 = new RotatingLine(300, 200, 60, color(255, 0, 0), 1, 2);
 
-    rotatingLine2 = new RotatingLine(
-        300, 200, // 中心点
-        60, // 長さ
-        color(255, 0, 0), // 色
-        1, // 回転方向
-        2 // 回転速度
-    );
-
-    connectingLine1 = new ConnectingLine(150);
-    connectingLine2 = new ConnectingLine(200);
+    connectingLine1 = new ConnectingLine(150, color(0, 255, 0));
+    connectingLine2 = new ConnectingLine(200, color(0, 255, 0));
 }
 
 function draw() {
@@ -103,7 +88,7 @@ function getFixedLengthJointDual(A, B, r1, r2) {
  */
 class RotatingLine {
     /**
-     * コンストラクタ。
+     * コンストラクタ
      * @param {number} centerX - 回転の中心X座標
      * @param {number} centerY - 回転の中心Y座標
      * @param {number} length - 線の長さ
@@ -156,8 +141,14 @@ class RotatingLine {
  * 回転する線に接続する線のクラス
  */
 class ConnectingLine {
-    constructor(length) {
+    /**
+     * コンストラクタ
+     * @param {number} length - 線の長さ
+     * @param {color} color - 線の色
+     */
+    constructor(length, color) {
         this.length = length;
+        this.color = color;
         this.start = createVector(0, 0);
         this.end = createVector(0, 0);
     }
@@ -168,7 +159,7 @@ class ConnectingLine {
     }
 
     display() {
-        stroke("green");
+        stroke(this.color);
         strokeWeight(2);
         line(this.start.x, this.start.y, this.end.x, this.end.y);
     }
