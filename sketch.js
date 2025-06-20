@@ -40,7 +40,20 @@ function draw() {
   ellipse(end2.x, end2.y, 10, 10);
 }
 
+
+/**
+ * 回転する線を表すクラス。
+ */
 class RotatingLine {
+  /**
+   * コンストラクタ。
+   * @param {number} centerX - 回転の中心X座標
+   * @param {number} centerY - 回転の中心Y座標
+   * @param {number} length - 線の長さ
+   * @param {color} color - 線の色
+   * @param {number} direction - 回転の向き（1で時計回り、-1で反時計回り）
+   * @param {number} speed - 回転速度（角度の増加量）
+   */
   constructor(centerX, centerY, length, color, direction, speed) {
     this.cx = centerX;
     this.cy = centerY;
@@ -51,10 +64,16 @@ class RotatingLine {
     this.angle = 0;
   }
 
+  /**
+   * フレームごとの回転角度を更新。
+   */
   update() {
     this.angle += this.speed * this.direction;
   }
 
+  /**
+   * 回転した線をキャンバスに描画。
+   */
   display() {
     push();
     translate(this.cx, this.cy);
@@ -65,6 +84,10 @@ class RotatingLine {
     pop();
   }
 
+  /**
+   * 線の先端（回転後の位置）を返す。
+   * @returns {p5.Vector} 線の先端の座標
+   */
   getEndPoint() {
     let x = this.cx + cos(this.angle) * this.length;
     let y = this.cy + sin(this.angle) * this.length;
