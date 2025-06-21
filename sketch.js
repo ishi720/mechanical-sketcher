@@ -9,12 +9,14 @@ let extensionLine2;
 let connectingPointA;
 let connectingPointB;
 let connectingPointC;
+let connectingPointD;
+let connectingPointE;
 
 function setup() {
     createCanvas(400, 400);
     angleMode(DEGREES);
 
-    rotatingLine1 = new RotatingLine(100, 300, 40, color(255, 0, 0), 1, 2.4);
+    rotatingLine1 = new RotatingLine(100, 300, 60, color(255, 0, 0), 1, 2.4);
     rotatingLine2 = new RotatingLine(300, 300, 60, color(255, 0, 0), 1, 2);
 
     connectingLine1 = new ConnectingLine(150, color(0, 255, 0));
@@ -23,6 +25,8 @@ function setup() {
     connectingPointA = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
     connectingPointB = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
     connectingPointC = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
+    connectingPointD = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
+    connectingPointE = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
 
     extensionLine1 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 255, 0));
     extensionLine2 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 255, 0));
@@ -60,9 +64,12 @@ function draw() {
         extensionLine1.display();
 
         let dirB = p5.Vector.sub(joint, B);
-        extensionLine1.setStart(joint);
-        extensionLine1.setDirection(dirB);
-        extensionLine1.display();
+        extensionLine2.setStart(joint);
+        extensionLine2.setDirection(dirB);
+        extensionLine2.display();
+
+        let D = extensionLine1.getEndPoint();
+        let E = extensionLine2.getEndPoint();
 
         // 点の描画
         connectingPointA.update(A);
@@ -71,6 +78,10 @@ function draw() {
         connectingPointB.display();
         connectingPointC.update(joint);
         connectingPointC.display();
+        connectingPointD.update(D);
+        connectingPointD.display();
+        connectingPointE.update(E);
+        connectingPointE.display();
     }
 }
 
@@ -293,5 +304,13 @@ class ExtendedLine {
         stroke(this.color);
         strokeWeight(2);
         line(this.start.x, this.start.y, end.x, end.y);
+    }
+
+     /**
+     * 線の先端（回転後の位置）を返す
+     * @returns {p5.Vector} 線の先端の座標
+     */
+    getEndPoint() {
+        return p5.Vector.add(this.start, p5.Vector.mult(this.direction, this.length));
     }
 }
