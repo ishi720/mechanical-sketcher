@@ -14,6 +14,8 @@ let connectingPointC;
 let connectingPointD;
 let connectingPointE;
 let connectingPointF;
+let connectingPointG;
+let connectingPointH;
 
 let showMechanism = false;
 
@@ -35,6 +37,8 @@ function setup() {
     connectingPointD = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
     connectingPointE = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
     connectingPointF = new ConnectingPoint(10, color(0, 0, 0), color(200, 100, 200), true);
+    connectingPointG = new ConnectingPoint(10, color(0, 0, 0), color(200, 100, 200), false);
+    connectingPointH = new ConnectingPoint(10, color(0, 0, 0), color(200, 100, 200), false);
 
     extensionLine1 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 0, 0));
     extensionLine2 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 0, 0));
@@ -46,6 +50,10 @@ function draw() {
     // 回転更新と描画
     rotatingLine1.update();
     rotatingLine2.update();
+
+    // 回転軸の中心位置に点を表示
+    connectingPointG.update(createVector(rotatingLine1.cx, rotatingLine1.cy));
+    connectingPointH.update(createVector(rotatingLine2.cx, rotatingLine2.cy));
 
     // 回転棒の先端位置を取得
     let A = rotatingLine1.getEndPoint();
@@ -90,24 +98,29 @@ function draw() {
         connectingPointE.displayOrbit();
         connectingPointF.update(F);
         connectingPointF.displayOrbit();
+        connectingPointG.update(createVector(rotatingLine1.cx, rotatingLine1.cy));
+        connectingPointH.update(createVector(rotatingLine2.cx, rotatingLine2.cy));
+
 
         if (showMechanism) {
-          rotatingLine1.display();
-          rotatingLine2.display();
-          connectingLine1.display();
-          connectingLine2.display();
-          extensionLine1.display();
-          extensionLine2.display();
-          connectingLine1.display();
-          connectingLine2.display();
-          connectingLine3.display();
-          connectingLine4.display();
-          connectingPointA.displayPoint();
-          connectingPointB.displayPoint();
-          connectingPointC.displayPoint();
-          connectingPointD.displayPoint();
-          connectingPointE.displayPoint();
-          connectingPointF.displayPoint();
+            rotatingLine1.display();
+            rotatingLine2.display();
+            connectingLine1.display();
+            connectingLine2.display();
+            extensionLine1.display();
+            extensionLine2.display();
+            connectingLine1.display();
+            connectingLine2.display();
+            connectingLine3.display();
+            connectingLine4.display();
+            connectingPointA.displayPoint();
+            connectingPointB.displayPoint();
+            connectingPointC.displayPoint();
+            connectingPointD.displayPoint();
+            connectingPointE.displayPoint();
+            connectingPointF.displayPoint();
+            connectingPointG.displayPoint();
+            connectingPointH.displayPoint();
         }
     }
 }
