@@ -15,27 +15,29 @@ let connectingPointD;
 let connectingPointE;
 let connectingPointF;
 
+let showMechanism = false;
+
 function setup() {
     createCanvas(800, 800);
     angleMode(DEGREES);
 
-    rotatingLine1 = new RotatingLine(300, 600, 60, color(255, 0, 0), 1, 2.1);
-    rotatingLine2 = new RotatingLine(500, 600, 60, color(255, 0, 0), 1, 2);
+    rotatingLine1 = new RotatingLine(300, 600, 60, color(0, 0, 0), 1.2, 2.3);
+    rotatingLine2 = new RotatingLine(500, 600, 60, color(0, 0, 0), 1, 2);
 
-    connectingLine1 = new ConnectingLine(150, color(0, 255, 0));
-    connectingLine2 = new ConnectingLine(200, color(0, 255, 0));
-    connectingLine3 = new ConnectingLine(100, color(0, 255, 255));
-    connectingLine4 = new ConnectingLine(100, color(0, 255, 255));
+    connectingLine1 = new ConnectingLine(150, color(0, 0, 0));
+    connectingLine2 = new ConnectingLine(200, color(0, 0, 0));
+    connectingLine3 = new ConnectingLine(100, color(0, 0, 0));
+    connectingLine4 = new ConnectingLine(100, color(0, 0, 0));
 
     connectingPointA = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
     connectingPointB = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
     connectingPointC = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
     connectingPointD = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
     connectingPointE = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
-    connectingPointF = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), true);
+    connectingPointF = new ConnectingPoint(10, color(0, 0, 0), color(200, 100, 200), true);
 
-    extensionLine1 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 255, 0));
-    extensionLine2 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 255, 0));
+    extensionLine1 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 0, 0));
+    extensionLine2 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 0, 0));
 }
 
 function draw() {
@@ -43,9 +45,7 @@ function draw() {
 
     // 回転更新と描画
     rotatingLine1.update();
-    rotatingLine1.display();
     rotatingLine2.update();
-    rotatingLine2.display();
 
     // 回転棒の先端位置を取得
     let A = rotatingLine1.getEndPoint();
@@ -59,20 +59,16 @@ function draw() {
         connectingLine1.update(A, C);
         connectingLine2.update(B, C);
 
-        // 緑棒の描画
-        connectingLine1.display();
-        connectingLine2.display();
-
         // AC方向に延長線を更新・描画
         let dirA = p5.Vector.sub(C, A);
         extensionLine1.setStart(C);
         extensionLine1.setDirection(dirA);
-        extensionLine1.display();
+
 
         let dirB = p5.Vector.sub(C, B);
         extensionLine2.setStart(C);
         extensionLine2.setDirection(dirB);
-        extensionLine2.display();
+
 
         let D = extensionLine1.getEndPoint();
         let E = extensionLine2.getEndPoint();
@@ -80,23 +76,39 @@ function draw() {
         let F = getFixedLengthJointDual(D, E, connectingLine3.length, connectingLine4.length, true);
         connectingLine3.update(D, F);
         connectingLine4.update(E, F);
-        connectingLine3.display();
-        connectingLine4.display();
-
 
         // 点の描画
         connectingPointA.update(A);
-        connectingPointA.display();
+        connectingPointA.displayOrbit();
         connectingPointB.update(B);
-        connectingPointB.display();
+        connectingPointB.displayOrbit();
         connectingPointC.update(C);
-        connectingPointC.display();
+        connectingPointC.displayOrbit();
         connectingPointD.update(D);
-        connectingPointD.display();
+        connectingPointD.displayOrbit();
         connectingPointE.update(E);
-        connectingPointE.display();
+        connectingPointE.displayOrbit();
         connectingPointF.update(F);
-        connectingPointF.display();
+        connectingPointF.displayOrbit();
+
+        if (showMechanism) {
+          rotatingLine1.display();
+          rotatingLine2.display();
+          connectingLine1.display();
+          connectingLine2.display();
+          extensionLine1.display();
+          extensionLine2.display();
+          connectingLine1.display();
+          connectingLine2.display();
+          connectingLine3.display();
+          connectingLine4.display();
+          connectingPointA.displayPoint();
+          connectingPointB.displayPoint();
+          connectingPointC.displayPoint();
+          connectingPointD.displayPoint();
+          connectingPointE.displayPoint();
+          connectingPointF.displayPoint();
+        }
     }
 }
 
@@ -271,26 +283,38 @@ class ConnectingPoint {
         }
     }
 
+
     /**
-     * 接続点の描画と軌跡の描画
+     * 軌跡の描画
      */
-    display() {
-        // 軌跡の描画
+    displayOrbit() {
         if (this.isOrbit && this.orbit.length > 1) {
             noFill();
             stroke(this.orbitColor);
-            strokeWeight(2);
+            strokeWeight(1.5);
             beginShape();
             for (let p of this.orbit) {
                 vertex(p.x, p.y);
             }
             endShape();
         }
+    }
 
-        // 点の描画
+    /**
+     * 点の描画
+     */
+    displayPoint() {
         fill(this.color);
         noStroke();
         ellipse(this.pos.x, this.pos.y, this.size, this.size);
+    }
+
+    /**
+     * 点と軌道の両方を描画（従来の display の統合関数）
+     */
+    display() {
+        this.displayOrbit();
+        this.displayPoint();
     }
 }
 
