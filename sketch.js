@@ -237,6 +237,7 @@ class ConnectingPoint {
 
         this.orbit = []; // 軌跡座標
         this.maxTrailLength = 1000; // 保存する軌跡数
+        this.orbitSave = true;
     }
 
     /**
@@ -245,12 +246,27 @@ class ConnectingPoint {
      */
     update(pos) {
         this.pos = pos.copy();
-
-        // 軌跡保存（移動があった場合のみ）
-        if (this.isOrbit) {
+        if (this.isOrbit && this.orbitSave) {
             this.orbit.push(this.pos.copy());
-            if (this.orbit.length > this.maxTrailLength) {
-                this.orbit.shift(); // 古いものから削除
+
+            if (this.orbit.length >= 200) {
+                const head = this.orbit.slice(0, 100);
+
+                // 先頭100個と一致する並びを orbit 内で探す
+                for (let i = 100; i <= this.orbit.length - 100; i++) {
+                    let match = true;
+                    for (let j = 0; j < 100; j++) {
+                        if (this.orbit[i + j].dist(head[j]) > 0.5) {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if (match) {
+                        this.orbitSave = false;
+                        console.log("軌道が繰り返されたため、保存を終了しました");
+                        break;
+                    }
+                }
             }
         }
     }
