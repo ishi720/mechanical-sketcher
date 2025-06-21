@@ -19,7 +19,7 @@ function setup() {
     createCanvas(800, 800);
     angleMode(DEGREES);
 
-    rotatingLine1 = new RotatingLine(300, 600, 60, color(255, 0, 0), 1, 2.4);
+    rotatingLine1 = new RotatingLine(300, 600, 60, color(255, 0, 0), 1, 2.1);
     rotatingLine2 = new RotatingLine(500, 600, 60, color(255, 0, 0), 1, 2);
 
     connectingLine1 = new ConnectingLine(150, color(0, 255, 0));
@@ -27,12 +27,12 @@ function setup() {
     connectingLine3 = new ConnectingLine(100, color(0, 255, 255));
     connectingLine4 = new ConnectingLine(100, color(0, 255, 255));
 
-    connectingPointA = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
-    connectingPointB = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
-    connectingPointC = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
-    connectingPointD = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
-    connectingPointE = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
-    connectingPointF = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
+    connectingPointA = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
+    connectingPointB = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
+    connectingPointC = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
+    connectingPointD = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
+    connectingPointE = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), false);
+    connectingPointF = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100), true);
 
     extensionLine1 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 255, 0));
     extensionLine2 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 255, 0));
@@ -226,16 +226,17 @@ class ConnectingPoint {
      * @param {number} size - 表示サイズ
      * @param {color} color - 色
      * @param {color} orbitColor - 軌道の色
+     * @param {boolean} isOrbit - 軌道の描画
      */
-    constructor(size, color, orbitColor) {
+    constructor(size, color, orbitColor, isOrbit) {
         this.pos = createVector(0, 0); // 現在位置
         this.size = size;
         this.color = color;
         this.orbitColor = orbitColor;
+        this.isOrbit = isOrbit;
 
         this.orbit = []; // 軌跡座標
-        this.maxTrailLength = 300; // 保存する軌跡数
-        this.showTrail = true; // 軌跡を描くかどうか（ON/OFF制御も可能）
+        this.maxTrailLength = 1000; // 保存する軌跡数
     }
 
     /**
@@ -246,7 +247,7 @@ class ConnectingPoint {
         this.pos = pos.copy();
 
         // 軌跡保存（移動があった場合のみ）
-        if (this.showTrail) {
+        if (this.isOrbit) {
             this.orbit.push(this.pos.copy());
             if (this.orbit.length > this.maxTrailLength) {
                 this.orbit.shift(); // 古いものから削除
@@ -259,7 +260,7 @@ class ConnectingPoint {
      */
     display() {
         // 軌跡の描画
-        if (this.showTrail && this.orbit.length > 1) {
+        if (this.isOrbit && this.orbit.length > 1) {
             noFill();
             stroke(this.orbitColor);
             strokeWeight(2);
