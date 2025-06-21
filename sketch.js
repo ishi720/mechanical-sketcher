@@ -12,7 +12,7 @@ function setup() {
     createCanvas(400, 400);
     angleMode(DEGREES);
 
-    rotatingLine1 = new RotatingLine(100, 200, 60, color(255, 0, 0), 1, 2.4);
+    rotatingLine1 = new RotatingLine(100, 200, 40, color(255, 0, 0), 1, 2.4);
     rotatingLine2 = new RotatingLine(300, 200, 60, color(255, 0, 0), -1, 2);
 
     connectingLine1 = new ConnectingLine(150, color(0, 255, 0));
@@ -37,7 +37,7 @@ function draw() {
     let B = rotatingLine2.getEndPoint();
 
     // 緑の棒がそれぞれの長さで繋がる交点を計算
-    let joint = getFixedLengthJointDual(A, B, connectingLine1.length, connectingLine2.length);
+    let joint = getFixedLengthJointDual(A, B, connectingLine1.length, connectingLine2.length, false);
 
     if (joint) {
         // 緑棒の位置更新
@@ -64,9 +64,10 @@ function draw() {
  * @param {p5.Vector} B - 緑棒2の起点
  * @param {number} r1 - 緑棒1の長さ
  * @param {number} r2 - 緑棒2の長さ
+ * @param {boolean} useUpper - trueで上側交点、falseで下側交点を返す
  * @returns {p5.Vector|null} - 交差点（上側）、なければ null
  */
-function getFixedLengthJointDual(A, B, r1, r2) {
+function getFixedLengthJointDual(A, B, r1, r2, useUpper = true) {
     let d = dist(A.x, A.y, B.x, B.y);
     if (d > r1 + r2 || d < abs(r1 - r2) || d === 0) return null;
 
@@ -86,7 +87,10 @@ function getFixedLengthJointDual(A, B, r1, r2) {
     let nx = -dy;
     let ny = dx;
 
-    return createVector(px + h * nx, py + h * ny); // 上側交点
+    // 上側 or 下側を選んで返す
+    let sign = useUpper ? 1 : -1;
+
+    return createVector(px + sign * h * nx, py + sign * h * ny);
 }
 
 /**
