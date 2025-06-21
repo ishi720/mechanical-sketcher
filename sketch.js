@@ -47,6 +47,14 @@ function setup() {
 function draw() {
     background(240);
 
+    if (rotatingLine1.dragging) {
+        displayReachableArea(rotatingLine1, rotatingLine2, connectingLine1, connectingLine2);
+    }
+
+    if (rotatingLine2.dragging) {
+        displayReachableArea(rotatingLine2, rotatingLine1, connectingLine1, connectingLine2);
+    }
+
     // 回転更新と描画
     rotatingLine1.update();
     rotatingLine2.update();
@@ -184,6 +192,9 @@ class RotatingLine {
         this.dragging = false;
         this.offsetX = 0;
         this.offsetY = 0;
+
+        this.startDragX = centerX;
+        this.startDragY = centerY;
     }
 
     /**
@@ -230,6 +241,10 @@ class RotatingLine {
         this.dragging = true;
         this.offsetX = this.cx - mouseX;
         this.offsetY = this.cy - mouseY;
+
+        // ドラッグ開始位置を保存
+        this.startDragX = this.cx;
+        this.startDragY = this.cy;
     }
 
     drag() {
@@ -241,6 +256,12 @@ class RotatingLine {
 
     endDrag() {
         this.dragging = false;
+        // ドラッグ中に可達性チェック
+        if (!checkReachability()) {
+            // 不可達なら元の位置に戻す
+            this.cx = this.startDragX;
+            this.cy = this.startDragY;
+        }
     }
 }
 
@@ -453,5 +474,58 @@ function mouseReleased() {
         // ねじを動かした直後だけ軌道をリセット
         connectingPointF.orbit = [];
         connectingPointF.orbitSave = true;
+    }
+}
+
+function checkReachability() {
+    let A = rotatingLine1.getEndPoint();
+    let B = rotatingLine2.getEndPoint();
+    let G = createVector(rotatingLine1.cx, rotatingLine1.cy);
+    let H = createVector(rotatingLine2.cx, rotatingLine2.cy);
+
+    let AG = p5.Vector.dist(A, G);
+    let GH = p5.Vector.dist(G, H);
+    let HB = p5.Vector.dist(H, B);
+
+    let C = getFixedLengthJointDual(A, B, connectingLine1.length, connectingLine2.length, false);
+    if (!C) {
+        console.log("リンクの交点が存在しない（姿勢が無理）");
+        return false;
+    }
+
+    let AC = p5.Vector.dist(A, C);
+    let CB = p5.Vector.dist(B, C);
+
+    let totalByLink = AC + CB;
+    let totalByFixed = AG + GH + HB;
+
+    let reachable = totalByLink - totalByFixed;
+    return reachable > 0;
+}
+
+/**
+ * ドラッグ中の回転中心の可動可能範囲を円で表示する
+ * @param {RotatingLine} draggedLine - ドラッグ中の回転ライン
+ * @param {RotatingLine} otherLine - 相手側の固定回転ライン
+ * @param {ConnectingLine} line1 - 接続ライン1
+ * @param {ConnectingLine} line2 - 接続ライン2
+ */
+function displayReachableArea(draggedLine, otherLine, line1, line2) {
+    let G = createVector(otherLine.cx, otherLine.cy);
+    let H = createVector(draggedLine.cx, draggedLine.cy);
+    let A = otherLine.getEndPoint();
+    let B = draggedLine.getEndPoint();
+
+    let AG = p5.Vector.dist(A, G);
+    let HB = p5.Vector.dist(H, B);
+
+    let baseRadius = line1.length + line2.length;
+    let radius = baseRadius - AG - HB;
+
+    if (radius > 0) {
+        noFill();
+        stroke(0, 150, 255, 80);
+        strokeWeight(1.5);
+        ellipse(G.x, G.y, radius * 2, radius * 2);
     }
 }
