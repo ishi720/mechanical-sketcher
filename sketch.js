@@ -432,3 +432,26 @@ class ExtendedLine {
         return p5.Vector.add(this.start, p5.Vector.mult(this.direction, this.length));
     }
 }
+
+function mousePressed() {
+    if (rotatingLine1.isMouseOver()) rotatingLine1.startDrag();
+    if (rotatingLine2.isMouseOver()) rotatingLine2.startDrag();
+}
+
+function mouseDragged() {
+    rotatingLine1.drag();
+    rotatingLine2.drag();
+}
+
+function mouseReleased() {
+    let wasDragging = rotatingLine1.dragging || rotatingLine2.dragging;
+
+    rotatingLine1.endDrag();
+    rotatingLine2.endDrag();
+
+    if (wasDragging) {
+        // ねじを動かした直後だけ軌道をリセット
+        connectingPointF.orbit = [];
+        connectingPointF.orbitSave = true;
+    }
+}
