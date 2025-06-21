@@ -4,6 +4,8 @@ let rotatingLine1;
 let rotatingLine2;
 let connectingLine1;
 let connectingLine2;
+let connectingLine3;
+let connectingLine4;
 let extensionLine1;
 let extensionLine2;
 let connectingPointA;
@@ -11,22 +13,26 @@ let connectingPointB;
 let connectingPointC;
 let connectingPointD;
 let connectingPointE;
+let connectingPointF;
 
 function setup() {
-    createCanvas(400, 400);
+    createCanvas(800, 800);
     angleMode(DEGREES);
 
-    rotatingLine1 = new RotatingLine(100, 300, 60, color(255, 0, 0), 1, 2.4);
-    rotatingLine2 = new RotatingLine(300, 300, 60, color(255, 0, 0), 1, 2);
+    rotatingLine1 = new RotatingLine(300, 600, 60, color(255, 0, 0), 1, 2.4);
+    rotatingLine2 = new RotatingLine(500, 600, 60, color(255, 0, 0), 1, 2);
 
     connectingLine1 = new ConnectingLine(150, color(0, 255, 0));
     connectingLine2 = new ConnectingLine(200, color(0, 255, 0));
+    connectingLine3 = new ConnectingLine(100, color(0, 255, 255));
+    connectingLine4 = new ConnectingLine(100, color(0, 255, 255));
 
     connectingPointA = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
     connectingPointB = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
     connectingPointC = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
     connectingPointD = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
     connectingPointE = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
+    connectingPointF = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
 
     extensionLine1 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 255, 0));
     extensionLine2 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 255, 0));
@@ -46,42 +52,51 @@ function draw() {
     let B = rotatingLine2.getEndPoint();
 
     // 緑の棒がそれぞれの長さで繋がる交点を計算
-    let joint = getFixedLengthJointDual(A, B, connectingLine1.length, connectingLine2.length, false);
+    let C = getFixedLengthJointDual(A, B, connectingLine1.length, connectingLine2.length, false);
 
-    if (joint) {
+    if (C) {
         // 緑棒の位置更新
-        connectingLine1.update(A, joint);
-        connectingLine2.update(B, joint);
+        connectingLine1.update(A, C);
+        connectingLine2.update(B, C);
 
         // 緑棒の描画
         connectingLine1.display();
         connectingLine2.display();
 
         // AC方向に延長線を更新・描画
-        let dirA = p5.Vector.sub(joint, A);
-        extensionLine1.setStart(joint);
+        let dirA = p5.Vector.sub(C, A);
+        extensionLine1.setStart(C);
         extensionLine1.setDirection(dirA);
         extensionLine1.display();
 
-        let dirB = p5.Vector.sub(joint, B);
-        extensionLine2.setStart(joint);
+        let dirB = p5.Vector.sub(C, B);
+        extensionLine2.setStart(C);
         extensionLine2.setDirection(dirB);
         extensionLine2.display();
 
         let D = extensionLine1.getEndPoint();
         let E = extensionLine2.getEndPoint();
 
+        let F = getFixedLengthJointDual(D, E, connectingLine3.length, connectingLine4.length, true);
+        connectingLine3.update(D, F);
+        connectingLine4.update(E, F);
+        connectingLine3.display();
+        connectingLine4.display();
+
+
         // 点の描画
         connectingPointA.update(A);
         connectingPointA.display();
         connectingPointB.update(B);
         connectingPointB.display();
-        connectingPointC.update(joint);
+        connectingPointC.update(C);
         connectingPointC.display();
         connectingPointD.update(D);
         connectingPointD.display();
         connectingPointE.update(E);
         connectingPointE.display();
+        connectingPointF.update(F);
+        connectingPointF.display();
     }
 }
 
