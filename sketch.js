@@ -4,6 +4,8 @@ let rotatingLine1;
 let rotatingLine2;
 let connectingLine1;
 let connectingLine2;
+let extensionLine1;
+let extensionLine2;
 let connectingPointA;
 let connectingPointB;
 let connectingPointC;
@@ -12,8 +14,8 @@ function setup() {
     createCanvas(400, 400);
     angleMode(DEGREES);
 
-    rotatingLine1 = new RotatingLine(100, 200, 40, color(255, 0, 0), 1, 2.4);
-    rotatingLine2 = new RotatingLine(300, 200, 60, color(255, 0, 0), -1, 2);
+    rotatingLine1 = new RotatingLine(100, 300, 40, color(255, 0, 0), 1, 2.4);
+    rotatingLine2 = new RotatingLine(300, 300, 60, color(255, 0, 0), 1, 2);
 
     connectingLine1 = new ConnectingLine(150, color(0, 255, 0));
     connectingLine2 = new ConnectingLine(200, color(0, 255, 0));
@@ -21,6 +23,9 @@ function setup() {
     connectingPointA = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
     connectingPointB = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
     connectingPointC = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
+
+    extensionLine1 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 255, 0));
+    extensionLine2 = new ExtendedLine(createVector(0, 0), createVector(1, 0), 100, color(0, 255, 0));
 }
 
 function draw() {
@@ -47,6 +52,17 @@ function draw() {
         // 緑棒の描画
         connectingLine1.display();
         connectingLine2.display();
+
+        // AC方向に延長線を更新・描画
+        let dirA = p5.Vector.sub(joint, A);
+        extensionLine1.setStart(joint);
+        extensionLine1.setDirection(dirA);
+        extensionLine1.display();
+
+        let dirB = p5.Vector.sub(joint, B);
+        extensionLine1.setStart(joint);
+        extensionLine1.setDirection(dirB);
+        extensionLine1.display();
 
         // 点の描画
         connectingPointA.update(A);
@@ -232,5 +248,50 @@ class ConnectingPoint {
         fill(this.color);
         noStroke();
         ellipse(this.pos.x, this.pos.y, this.size, this.size);
+    }
+}
+
+/**
+ * 任意の方向に延長する直線クラス
+ */
+class ExtendedLine {
+    /**
+     * コンストラクタ
+     * @param {p5.Vector} start - 始点
+     * @param {p5.Vector} direction - 向きベクトル
+     * @param {number} length - 線の長さ
+     * @param {color} color - 線の色
+     */
+    constructor(start, direction, length, color) {
+        this.start = start.copy();
+        this.setDirection(direction);
+        this.length = length;
+        this.color = color;
+    }
+
+    /**
+     * 向きを更新（内部的に正規化）
+     * @param {p5.Vector} direction
+     */
+    setDirection(direction) {
+        this.direction = direction.copy().normalize();
+    }
+
+    /**
+     * 始点の更新
+     * @param {p5.Vector} start
+     */
+    setStart(start) {
+        this.start = start.copy();
+    }
+
+    /**
+     * 線を描画
+     */
+    display() {
+        let end = p5.Vector.add(this.start, p5.Vector.mult(this.direction, this.length));
+        stroke(this.color);
+        strokeWeight(2);
+        line(this.start.x, this.start.y, end.x, end.y);
     }
 }
