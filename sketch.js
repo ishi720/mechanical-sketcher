@@ -13,14 +13,14 @@ function setup() {
     angleMode(DEGREES);
 
     rotatingLine1 = new RotatingLine(100, 200, 60, color(255, 0, 0), 1, 2.4);
-    rotatingLine2 = new RotatingLine(300, 200, 60, color(255, 0, 0), 1, 2);
+    rotatingLine2 = new RotatingLine(300, 200, 60, color(255, 0, 0), -1, 2);
 
     connectingLine1 = new ConnectingLine(150, color(0, 255, 0));
     connectingLine2 = new ConnectingLine(200, color(0, 255, 0));
 
-    connectingPointA = new ConnectingPoint(10, color(0, 0, 0));
-    connectingPointB = new ConnectingPoint(10, color(0, 0, 0));
-    connectingPointC = new ConnectingPoint(10, color(0, 0, 0));
+    connectingPointA = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
+    connectingPointB = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
+    connectingPointC = new ConnectingPoint(10, color(0, 0, 0), color(100, 100, 100));
 }
 
 function draw() {
@@ -171,32 +171,60 @@ class ConnectingLine {
     }
 }
 
+/**
+ * 点クラス
+ */
 class ConnectingPoint {
     /**
      * コンストラクタ
      * @param {number} size - 表示サイズ
      * @param {color} color - 色
+     * @param {color} orbitColor - 軌道の色
      */
-    constructor(size, color) {
+    constructor(size, color, orbitColor) {
         this.pos = createVector(0, 0); // 現在位置
         this.size = size;
         this.color = color;
+        this.orbitColor = orbitColor;
+
+        this.orbit = []; // 軌跡座標
+        this.maxTrailLength = 300; // 保存する軌跡数
+        this.showTrail = true; // 軌跡を描くかどうか（ON/OFF制御も可能）
     }
 
     /**
-     * 接続点の位置と接続線の情報を更新
+     * 接続点の位置を更新し、軌跡も保存
      * @param {p5.Vector} pos - 接続点の位置
-     * @param {p5.Vector} start - 線の始点（オプション）
-     * @param {p5.Vector} end - 線の終点（オプション）
      */
     update(pos) {
         this.pos = pos.copy();
+
+        // 軌跡保存（移動があった場合のみ）
+        if (this.showTrail) {
+            this.orbit.push(this.pos.copy());
+            if (this.orbit.length > this.maxTrailLength) {
+                this.orbit.shift(); // 古いものから削除
+            }
+        }
     }
 
     /**
-     * 接続点の描画
+     * 接続点の描画と軌跡の描画
      */
     display() {
+        // 軌跡の描画
+        if (this.showTrail && this.orbit.length > 1) {
+            noFill();
+            stroke(this.orbitColor);
+            strokeWeight(2);
+            beginShape();
+            for (let p of this.orbit) {
+                vertex(p.x, p.y);
+            }
+            endShape();
+        }
+
+        // 点の描画
         fill(this.color);
         noStroke();
         ellipse(this.pos.x, this.pos.y, this.size, this.size);
