@@ -181,6 +181,9 @@ class RotatingLine {
         this.direction = direction;
         this.speed = speed;
         this.angle = 0;
+        this.dragging = false;
+        this.offsetX = 0;
+        this.offsetY = 0;
     }
 
     /**
@@ -201,6 +204,11 @@ class RotatingLine {
         strokeWeight(2);
         line(0, 0, this.length, 0);
         pop();
+
+        // 中心点も表示（デバッグ用など）
+        fill(100);
+        noStroke();
+        ellipse(this.cx, this.cy, 12, 12);
     }
 
     /**
@@ -211,6 +219,28 @@ class RotatingLine {
         let x = this.cx + cos(this.angle) * this.length;
         let y = this.cy + sin(this.angle) * this.length;
         return createVector(x, y);
+    }
+
+    // ドラッグ開始判定
+    isMouseOver() {
+        return dist(mouseX, mouseY, this.cx, this.cy) < 12;
+    }
+
+    startDrag() {
+        this.dragging = true;
+        this.offsetX = this.cx - mouseX;
+        this.offsetY = this.cy - mouseY;
+    }
+
+    drag() {
+        if (this.dragging) {
+            this.cx = mouseX + this.offsetX;
+            this.cy = mouseY + this.offsetY;
+        }
+    }
+
+    endDrag() {
+        this.dragging = false;
     }
 }
 
