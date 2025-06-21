@@ -317,9 +317,28 @@ class ConnectingPoint {
      * 点の描画
      */
     displayPoint() {
-        fill(this.color);
-        noStroke();
-        ellipse(this.pos.x, this.pos.y, this.size, this.size);
+        push();
+        translate(this.pos.x, this.pos.y);
+
+        if (this.isOrbit) {
+            fill(this.color);
+            noStroke();
+            ellipse(0, 0, this.size, this.size);
+        } else {
+            // ねじ風デザイン
+            fill(180);
+            stroke(60);
+            strokeWeight(1.5);
+            ellipse(0, 0, this.size+5, this.size+5);
+
+            // 十字のドライバー溝
+            stroke(60);
+            strokeWeight(1);
+            line(-this.size * 0.3, -this.size * 0.3, this.size * 0.3, this.size * 0.3);
+            line(-this.size * 0.3, this.size * 0.3, this.size * 0.3, -this.size * 0.3);
+        }
+
+        pop();
     }
 
     /**
