@@ -263,6 +263,10 @@ class RotatingLine {
             this.cy = this.startDragY;
         }
     }
+
+    reverseDirection() {
+        this.direction *= -1;
+    }
 }
 
 /**
@@ -471,10 +475,14 @@ function mouseReleased() {
     rotatingLine2.endDrag();
 
     if (wasDragging) {
-        // ねじを動かした直後だけ軌道をリセット
-        connectingPointF.orbit = [];
-        connectingPointF.orbitSave = true;
+        orbitReset();
     }
+}
+
+function orbitReset() {
+    // ねじを動かした直後だけ軌道をリセット
+    connectingPointF.orbit = [];
+    connectingPointF.orbitSave = true;
 }
 
 function checkReachability() {
