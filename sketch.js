@@ -523,9 +523,19 @@ function displayReachableArea(draggedLine, otherLine, line1, line2) {
     let radius = baseRadius - AG - HB;
 
     if (radius > 0) {
-        noFill();
-        stroke(0, 150, 255, 80);
+        background(100, 100, 100)
+        fill(250);
+        stroke(240, 240, 240, 0);
         strokeWeight(1.5);
         ellipse(G.x, G.y, radius * 2, radius * 2);
+    }
+
+    let radius2 = AG + Math.abs(line1.length - line2.length) + HB;
+
+    if (radius > 0) {
+        fill(100, 100, 100);
+        stroke(100, 100, 100, 0);
+        strokeWeight(1.5);
+        ellipse(G.x, G.y, radius2 * 2, radius2 * 2);
     }
 }
