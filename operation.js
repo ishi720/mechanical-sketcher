@@ -35,9 +35,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const orbitColorPicker = document.getElementById("orbitColor");
     orbitColorPicker.addEventListener("input", () => {
         if (connectingPointF) {
-        const col = orbitColorPicker.value;
-        const c = color(col); // p5.js の color() に変換
-        connectingPointF.orbitColor = c;
+            const col = orbitColorPicker.value;
+            const c = color(col); // p5.js の color() に変換
+            connectingPointF.orbitColor = c;
+        }
+    });
+
+    // 左アーム速度
+    const speedLeftSlider = document.getElementById("speedLeft");
+    const speedLeftValue = document.getElementById("speedLeftValue");
+    speedLeftSlider.addEventListener("input", () => {
+        const val = parseFloat(speedLeftSlider.value);
+        speedLeftValue.textContent = val.toFixed(1);
+        if (rotatingLine1) {
+            rotatingLine1.speed = val;
+            orbitReset();
+        }
+    });
+
+    // 右アーム速度
+    const speedRightSlider = document.getElementById("speedRight");
+    const speedRightValue = document.getElementById("speedRightValue");
+    speedRightSlider.addEventListener("input", () => {
+        const val = parseFloat(speedRightSlider.value);
+        speedRightValue.textContent = val.toFixed(1);
+        if (rotatingLine2) {
+            rotatingLine2.speed = val;
+            orbitReset();
         }
     });
 });
