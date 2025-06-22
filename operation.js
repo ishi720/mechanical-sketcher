@@ -30,4 +30,14 @@ document.addEventListener("DOMContentLoaded", () => {
             orbitReset();
         }
     });
+
+    // 軌道の色変更
+    const orbitColorPicker = document.getElementById("orbitColor");
+    orbitColorPicker.addEventListener("input", () => {
+        if (connectingPointF) {
+        const col = orbitColorPicker.value;
+        const c = color(col); // p5.js の color() に変換
+        connectingPointF.orbitColor = c;
+        }
+    });
 });
