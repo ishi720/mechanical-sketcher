@@ -510,9 +510,6 @@ function checkReachability() {
     let reachable = totalByLink - totalByFixed;
     let reachable2 = AG + Math.abs(AC - CB) + HB < GH;
     return reachable > 0 && reachable2;
-
-
-
 }
 
 /**
