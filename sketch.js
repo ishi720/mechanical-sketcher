@@ -23,8 +23,8 @@ function setup() {
     createCanvas(800, 800);
     angleMode(DEGREES);
 
-    rotatingLine1 = new RotatingLine(300, 600, 60, color(0, 0, 0), 1.2, 2.3);
-    rotatingLine2 = new RotatingLine(500, 600, 60, color(0, 0, 0), 1, 2);
+    rotatingLine1 = new RotatingLine(300, 600, 60, color(0, 0, 0), 1, 2.2);
+    rotatingLine2 = new RotatingLine(500, 600, 60, color(0, 0, 0), -1, 2);
 
     connectingLine1 = new ConnectingLine(150, color(0, 0, 0));
     connectingLine2 = new ConnectingLine(200, color(0, 0, 0));
@@ -500,7 +500,11 @@ function checkReachability() {
     let totalByFixed = AG + GH + HB;
 
     let reachable = totalByLink - totalByFixed;
-    return reachable > 0;
+    let reachable2 = AG + Math.abs(AC - CB) + HB < GH;
+    return reachable > 0 && reachable2;
+
+
+
 }
 
 /**
