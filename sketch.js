@@ -17,7 +17,7 @@ let connectingPointF;
 let connectingPointG;
 let connectingPointH;
 
-let showMechanism = false;
+let showMechanism = true;
 
 function setup() {
     createCanvas(800, 800);
@@ -480,71 +480,70 @@ function mouseReleased() {
 }
 
 function orbitReset() {
-    // ねじを動かした直後だけ軌道をリセット
     connectingPointF.orbit = [];
     connectingPointF.orbitSave = true;
 }
 
 function checkReachability() {
-    let A = rotatingLine1.getEndPoint();
-    let B = rotatingLine2.getEndPoint();
-    let G = createVector(rotatingLine1.cx, rotatingLine1.cy);
-    let H = createVector(rotatingLine2.cx, rotatingLine2.cy);
+    let endPointA = rotatingLine1.getEndPoint();
+    let endPointB = rotatingLine2.getEndPoint();
+    let centerA = createVector(rotatingLine1.cx, rotatingLine1.cy);
+    let centerB = createVector(rotatingLine2.cx, rotatingLine2.cy);
 
-    let AG = p5.Vector.dist(A, G);
-    let GH = p5.Vector.dist(G, H);
-    let HB = p5.Vector.dist(H, B);
+    let lengthACenter  = p5.Vector.dist(endPointA, centerA);
+    let lengthBCenter = p5.Vector.dist(centerA, centerB);
+    let centerToCenter = p5.Vector.dist(centerB, endPointB);
 
-    let C = getFixedLengthJointDual(A, B, connectingLine1.length, connectingLine2.length, false);
-    if (!C) {
+    let jointPoint = getFixedLengthJointDual(endPointA, endPointB, connectingLine1.length, connectingLine2.length, false);
+    if (!jointPoint) {
         console.log("リンクの交点が存在しない（姿勢が無理）");
         return false;
     }
 
-    let AC = p5.Vector.dist(A, C);
-    let CB = p5.Vector.dist(B, C);
+    let lengthAJoint = p5.Vector.dist(endPointA, jointPoint);
+    let lengthBJoint = p5.Vector.dist(endPointB, jointPoint);
 
-    let totalByLink = AC + CB;
-    let totalByFixed = AG + GH + HB;
+    let totalByLink = lengthAJoint + lengthBJoint;
+    let totalByFixed = lengthACenter  + lengthBCenter + centerToCenter;
 
-    let reachable = totalByLink - totalByFixed;
-    let reachable2 = AG + Math.abs(AC - CB) + HB < GH;
-    return reachable > 0 && reachable2;
+    let condition1 = totalByLink - totalByFixed;
+    let condition2 = lengthACenter  + Math.abs(lengthAJoint - lengthBJoint) + centerToCenter < lengthBCenter;
+    return condition1 > 0 && condition2;
 }
 
 /**
  * ドラッグ中の回転中心の可動可能範囲を円で表示する
  * @param {RotatingLine} draggedLine - ドラッグ中の回転ライン
- * @param {RotatingLine} otherLine - 相手側の固定回転ライン
+ * @param {RotatingLine} fixedLine - 相手側の固定回転ライン
  * @param {ConnectingLine} line1 - 接続ライン1
  * @param {ConnectingLine} line2 - 接続ライン2
  */
-function displayReachableArea(draggedLine, otherLine, line1, line2) {
-    let G = createVector(otherLine.cx, otherLine.cy);
-    let H = createVector(draggedLine.cx, draggedLine.cy);
-    let A = otherLine.getEndPoint();
-    let B = draggedLine.getEndPoint();
+function displayReachableArea(draggedLine, fixedLine, line1, line2) {
+    let fixedCenter = createVector(fixedLine.cx, fixedLine.cy);
+    let draggedCenter = createVector(draggedLine.cx, draggedLine.cy);
+    let fixedEnd = fixedLine.getEndPoint();
+    let draggedEnd = draggedLine.getEndPoint();
 
-    let AG = p5.Vector.dist(A, G);
-    let HB = p5.Vector.dist(H, B);
+    let distFixedToCenter = p5.Vector.dist(fixedEnd, fixedCenter);
+    let distCenterToDragged = p5.Vector.dist(draggedCenter, draggedEnd);
 
     let baseRadius = line1.length + line2.length;
-    let radius = baseRadius - AG - HB;
+    let innerRadius  = baseRadius - distFixedToCenter - distCenterToDragged;
 
-    if (radius > 0) {
+    if (innerRadius > 0) {
         background(100, 100, 100)
         fill(250);
         stroke(240, 240, 240, 0);
         strokeWeight(1.5);
-        ellipse(G.x, G.y, radius * 2, radius * 2);
+        ellipse(fixedCenter.x, fixedCenter.y, innerRadius * 2, innerRadius * 2);
     }
 
-    let radius2 = AG + Math.abs(line1.length - line2.length) + HB;
+    let outerRadius = distFixedToCenter + Math.abs(line1.length - line2.length) + distCenterToDragged;
 
-    if (radius > 0) {
+    if (innerRadius > 0) {
         fill(100, 100, 100);
         stroke(100, 100, 100, 0);
         strokeWeight(1.5);
-        ellipse(G.x, G.y, radius2 * 2, radius2 * 2);
+        ellipse(fixedCenter.x, fixedCenter.y, outerRadius * 2, outerRadius * 2);
     }
 }
