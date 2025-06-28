@@ -135,10 +135,10 @@ function draw() {
 
 /**
  * 2点A, Bからそれぞれ異なる長さ r1, r2 で伸ばす棒が交差する点を求める
- * @param {p5.Vector} A - 緑棒1の起点
- * @param {p5.Vector} B - 緑棒2の起点
- * @param {number} r1 - 緑棒1の長さ
- * @param {number} r2 - 緑棒2の長さ
+ * @param {p5.Vector} A - 棒1の起点
+ * @param {p5.Vector} B - 棒2の起点
+ * @param {number} r1 - 棒1の長さ
+ * @param {number} r2 - 棒2の長さ
  * @param {boolean} useUpper - trueで上側交点、falseで下側交点を返す
  * @returns {p5.Vector|null} - 交差点（上側）、なければ null
  */
@@ -215,11 +215,6 @@ class RotatingLine {
         strokeWeight(2);
         line(0, 0, this.length, 0);
         pop();
-
-        // 中心点も表示（デバッグ用など）
-        fill(100);
-        noStroke();
-        ellipse(this.cx, this.cy, 12, 12);
     }
 
     /**
@@ -479,11 +474,19 @@ function mouseReleased() {
     }
 }
 
+
+/**
+ * 接続点Fの軌跡記録をリセットする
+ */
 function orbitReset() {
     connectingPointF.orbit = [];
     connectingPointF.orbitSave = true;
 }
 
+/**
+ * 現在の構造が物理的に成立するかどうかをチェックする
+ * @returns {boolean} - 成立するならtrue、しないならfalse
+ */
 function checkReachability() {
     let endPointA = rotatingLine1.getEndPoint();
     let endPointB = rotatingLine2.getEndPoint();
