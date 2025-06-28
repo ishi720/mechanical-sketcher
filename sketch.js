@@ -76,15 +76,8 @@ function draw() {
         connectingLine2.update(B, C);
 
         // AC方向に延長線を更新・描画
-        let dirA = p5.Vector.sub(C, A);
-        extensionLine1.setStart(C);
-        extensionLine1.setDirection(dirA);
-
-
-        let dirB = p5.Vector.sub(C, B);
-        extensionLine2.setStart(C);
-        extensionLine2.setDirection(dirB);
-
+        extensionLine1.updateFromPoints(A, C);
+        extensionLine2.updateFromPoints(B, C);
 
         let D = extensionLine1.getEndPoint();
         let E = extensionLine2.getEndPoint();
@@ -442,6 +435,17 @@ class ExtendedLine {
         stroke(this.color);
         strokeWeight(2);
         line(this.start.x, this.start.y, end.x, end.y);
+    }
+
+    /**
+     * 始点と終点から向きベクトルを自動計算して更新する
+     * @param {p5.Vector} start - 始点ベクトル
+     * @param {p5.Vector} end - 終点ベクトル
+     */
+    updateFromPoints(start, end) {
+        this.setStart(end);
+        const direction = p5.Vector.sub(end, start);
+        this.setDirection(direction);
     }
 
      /**
