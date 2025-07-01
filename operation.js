@@ -1,13 +1,5 @@
 "use strict";
 
-window.addEventListener("DOMContentLoaded", () => {
-    const checkbox = document.getElementById("toggleMechanism");
-    if (checkbox) {
-        checkbox.addEventListener("change", () => {
-            showMechanism = checkbox.checked;
-        });
-    }
-});
 document.addEventListener("DOMContentLoaded", () => {
     // メカニズム表示トグルの状態を取得
     const toggle = document.getElementById("toggleMechanism");
