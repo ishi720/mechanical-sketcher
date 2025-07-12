@@ -56,8 +56,10 @@ function draw() {
     }
 
     // 回転更新と描画
-    rotatingLine1.update();
-    rotatingLine2.update();
+    if (!rotatingLine1.dragging && !rotatingLine2.dragging) {
+        rotatingLine1.update();
+        rotatingLine2.update();
+    }
 
     // 回転軸の中心位置に点を表示
     connectingPointG.update(createVector(rotatingLine1.cx, rotatingLine1.cy));
