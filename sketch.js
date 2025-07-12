@@ -61,6 +61,15 @@ function draw() {
         rotatingLine2.update();
     }
 
+    // ホバー状態の確認
+    let hoverG = connectingPointG.checkHover();
+    let hoverH = connectingPointH.checkHover();
+    if (hoverG || hoverH) {
+        cursor(HAND);
+    } else {
+        cursor(ARROW);
+    }
+
     // 回転軸の中心位置に点を表示
     connectingPointG.update(createVector(rotatingLine1.cx, rotatingLine1.cy));
     connectingPointH.update(createVector(rotatingLine2.cx, rotatingLine2.cy));
@@ -308,6 +317,7 @@ class ConnectingPoint {
         this.orbit = []; // 軌跡座標
         this.maxTrailLength = 1000; // 保存する軌跡数
         this.orbitSave = true;
+        this.hovered = false;
     }
 
     /**
@@ -393,6 +403,13 @@ class ConnectingPoint {
         this.displayOrbit();
         this.displayPoint();
     }
+
+    // ホバー状態を更新して返す
+    checkHover() {
+        this.hovered = dist(mouseX, mouseY, this.pos.x, this.pos.y) < this.size / 2 + 5;
+        return this.hovered;
+    }
+
 }
 
 /**
