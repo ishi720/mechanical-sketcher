@@ -117,8 +117,6 @@ function draw() {
         if (showMechanism) {
             rotatingLine1.display();
             rotatingLine2.display();
-            connectingLine1.display();
-            connectingLine2.display();
             extensionLine1.display();
             extensionLine2.display();
             connectingLine1.display();
