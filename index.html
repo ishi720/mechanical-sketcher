@@ -1,63 +1,43 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mechanical Sketcher</title>
-  <link rel="shortcut icon" href="favicon.ico"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background: #f8f8f8;
-    }
-
-    main {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 1rem;
-    }
-
-    canvas {
-      width: 100% !important;
-      height: auto !important;
-      display: block;
-      margin: 0 auto;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanical Sketcher</title>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main>
-    <h1>Mechanical Sketcher</h1>
-    <div>
-      <label>
-        <input type="checkbox" id="toggleMechanism" checked>
-        メカニズム表示
-      </label>
-    </div>
-    <div>
-        <label for="orbitColor">軌道の色: </label>
-        <input type="color" id="orbitColor" value="#c864c8">
-    </div>
-    <div>
-      <button id="reverseLeft">回転方向切替 左アーム</button>
-      <button id="reverseRight">回転方向切替 右アーム</button>
-    </div>
-    <div>
-      <label for="speedLeft">左アーム速度: </label>
-      <input type="range" id="speedLeft" min="0" max="10" step="0.1" value="2.2">
-      <span id="speedLeftValue">2.2</span>
-    </div>
+    <main>
+        <h1>Mechanical Sketcher</h1>
+        <div>
+            <label>
+                <input type="checkbox" id="toggleMechanism" checked>
+                メカニズム表示
+            </label>
+        </div>
+        <div>
+            <label for="orbitColor">軌道の色: </label>
+            <input type="color" id="orbitColor" value="#c864c8">
+        </div>
+        <div>
+            <button id="reverseLeft">回転方向切替 左アーム</button>
+            <button id="reverseRight">回転方向切替 右アーム</button>
+        </div>
+        <div>
+            <label for="speedLeft">左アーム速度: </label>
+            <input type="range" id="speedLeft" min="0" max="10" step="0.1" value="2.2">
+            <span id="speedLeftValue">2.2</span>
+        </div>
 
-    <div>
-      <label for="speedRight">右アーム速度: </label>
-      <input type="range" id="speedRight" min="0" max="10" step="0.1" value="2">
-      <span id="speedRightValue">2.0</span>
-    </div>
-  </main>
-  <script src="sketch.js"></script>
-  <script src="operation.js"></script>
+        <div>
+            <label for="speedRight">右アーム速度: </label>
+            <input type="range" id="speedRight" min="0" max="10" step="0.1" value="2">
+            <span id="speedRightValue">2.0</span>
+        </div>
+    </main>
+    <script src="sketch.js"></script>
+    <script src="operation.js"></script>
 </body>
 </html>
