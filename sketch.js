@@ -229,11 +229,17 @@ class RotatingLine {
         return createVector(x, y);
     }
 
-    // ドラッグ開始判定
+    /**
+     * マウスが回転中心上にあるか判定
+     * @returns {boolean} 中心をクリック可能な範囲にある場合true
+     */
     isMouseOver() {
         return dist(mouseX, mouseY, this.cx, this.cy) < 12;
     }
 
+    /**
+     * ドラッグ開始時の処理
+     */
     startDrag() {
         this.dragging = true;
         this.offsetX = this.cx - mouseX;
@@ -244,6 +250,9 @@ class RotatingLine {
         this.startDragY = this.cy;
     }
 
+    /**
+     * ドラッグ中の処理
+     */
     drag() {
         if (this.dragging) {
             this.cx = mouseX + this.offsetX;
@@ -251,6 +260,9 @@ class RotatingLine {
         }
     }
 
+    /**
+     * ドラッグ終了時の処理
+     */
     endDrag() {
         this.dragging = false;
         // ドラッグ中に可達性チェック
@@ -261,6 +273,9 @@ class RotatingLine {
         }
     }
 
+    /**
+     * 回転方向を反転する
+     */
     reverseDirection() {
         this.direction *= -1;
     }
