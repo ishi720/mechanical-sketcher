@@ -20,7 +20,8 @@ let connectingPointH;
 let showMechanism = true;
 
 function setup() {
-    createCanvas(800, 800);
+    let canvas = createCanvas(800, 800);
+    canvas.parent('canvas-container');
     angleMode(DEGREES);
 
     rotatingLine1 = new RotatingLine(300, 600, 60, color(0, 0, 0), 1, 2.2);
