@@ -6,38 +6,57 @@
     <title>Mechanical Sketcher</title>
     <link rel="shortcut icon" href="favicon.ico"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <main>
         <h1>Mechanical Sketcher</h1>
-        <div>
-            <label>
-                <input type="checkbox" id="toggleMechanism" checked>
-                メカニズム表示
-            </label>
-        </div>
-        <div>
-            <label for="orbitColor">軌道の色: </label>
-            <input type="color" id="orbitColor" value="#c864c8">
-        </div>
-        <div>
-            <button id="reverseLeft">回転方向切替 左アーム</button>
-            <button id="reverseRight">回転方向切替 右アーム</button>
-        </div>
-        <div>
-            <label for="speedLeft">左アーム速度: </label>
-            <input type="range" id="speedLeft" min="0" max="10" step="0.1" value="2.2">
-            <span id="speedLeftValue">2.2</span>
-        </div>
 
-        <div>
-            <label for="speedRight">右アーム速度: </label>
-            <input type="range" id="speedRight" min="0" max="10" step="0.1" value="2">
-            <span id="speedRightValue">2.0</span>
-        </div>
+        <div class="container">
+            <div class="controls">
+                <div class="control-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="toggleMechanism" checked>
+                        <span>メカニズム表示</span>
+                    </label>
+                </div>
 
-        <div id="canvas-container"></div>
+                <div class="control-section">
+                    <div class="section-title">カラー設定</div>
+                    <div class="control-row">
+                        <label>軌道の色</label>
+                        <input type="color" id="orbitColor" value="#c864c8">
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <div class="section-title">回転制御</div>
+                    <button id="reverseLeft">← 左アーム反転</button>
+                    <button id="reverseRight">右アーム反転 →</button>
+                </div>
+
+                <div class="control-section">
+                    <div class="section-title">速度調整</div>
+                    <div class="control-row">
+                        <label>左アーム</label>
+                        <div class="slider-group">
+                            <input type="range" id="speedLeft" min="0" max="10" step="0.1" value="2.2">
+                            <span class="slider-value" id="speedLeftValue">2.2</span>
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <label>右アーム</label>
+                        <div class="slider-group">
+                            <input type="range" id="speedRight" min="0" max="10" step="0.1" value="2">
+                            <span class="slider-value" id="speedRightValue">2.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-wrapper" id="canvas-container">
+            </div>
+        </div>
     </main>
     <script src="sketch.js"></script>
     <script src="operation.js"></script>
