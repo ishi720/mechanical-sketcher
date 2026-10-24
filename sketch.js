@@ -1,7 +1,7 @@
-"use strict";
+import p5 from "p5";
 
-let rotatingLine1;
-let rotatingLine2;
+export let rotatingLine1;
+export let rotatingLine2;
 let connectingLine1;
 let connectingLine2;
 let connectingLine3;
@@ -13,11 +13,19 @@ let connectingPointB;
 let connectingPointC;
 let connectingPointD;
 let connectingPointE;
-let connectingPointF;
+export let connectingPointF;
 let connectingPointG;
 let connectingPointH;
 
 let showMechanism = true;
+
+/**
+ * メカニズム表示の切り替え
+ * @param {boolean} value - trueで表示
+ */
+export function setShowMechanism(value) {
+    showMechanism = value;
+}
 
 function setup() {
     let canvas = createCanvas(800, 800);
@@ -515,7 +523,7 @@ function mouseReleased() {
 /**
  * 接続点Fの軌跡記録をリセットする
  */
-function orbitReset() {
+export function orbitReset() {
     connectingPointF.orbit = [];
     connectingPointF.orbitSave = true;
 }
@@ -587,3 +595,7 @@ function displayReachableArea(draggedLine, fixedLine, line1, line2) {
         ellipse(fixedCenter.x, fixedCenter.y, outerRadius * 2, outerRadius * 2);
     }
 }
+
+// p5.js グローバルモードで起動する
+Object.assign(window, { setup, draw, mousePressed, mouseDragged, mouseReleased });
+new p5();

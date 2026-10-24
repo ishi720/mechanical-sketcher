@@ -1,10 +1,10 @@
-"use strict";
+import { rotatingLine1, rotatingLine2, connectingPointF, orbitReset, setShowMechanism } from "./sketch.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     // メカニズム表示トグルの状態を取得
     const toggle = document.getElementById("toggleMechanism");
     toggle.addEventListener("change", () => {
-        showMechanism = toggle.checked;
+        setShowMechanism(toggle.checked);
     });
 
     // 回転方向切り替えボタン（左アーム）

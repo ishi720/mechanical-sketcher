@@ -29,7 +29,7 @@
 
 ## 使い方
 
-1. ブラウザで `index.html` を開く
+1. デモページを開く（ローカルの場合は `npm run dev`）
 2. アニメーションが自動的に開始され、軌跡が描画されます
 3. 左側のコントロールパネルで各種設定を調整：
    - **メカニズム表示**: チェックボックスで機構の表示/非表示を切替
@@ -46,33 +46,39 @@
 | CSS3 | スタイリング |
 | JavaScript (ES6+) | アプリケーションロジック |
 | [p5.js](https://p5js.org/) | キャンバス描画・アニメーション |
+| [Vite](https://vite.dev/) | 開発サーバー・ビルド |
 
 ## ファイル構成
 
 ```
 mechanical-sketcher/
-├── index.html      # メインHTMLファイル
-├── sketch.js       # p5.jsによる描画・機構ロジック
-├── operation.js    # UIコントロールのイベント処理
-├── styles.css      # スタイルシート
-├── favicon.ico     # ファビコン
-├── LICENSE         # MITライセンス
-└── README.md       # このファイル
+├── .github/workflows/deploy.yml  # GitHub Pages デプロイ
+├── public/favicon.ico            # ファビコン
+├── index.html                    # メインHTMLファイル
+├── sketch.js                     # p5.jsによる描画・機構ロジック
+├── operation.js                  # UIコントロールのイベント処理
+├── styles.css                    # スタイルシート
+├── vite.config.js                # Vite設定
+├── package.json
+├── LICENSE                       # MITライセンス
+└── README.md                     # このファイル
 ```
 
 ## ローカルでの実行
 
 ```bash
-# リポジトリをクローン
 git clone https://github.com/ishi720/mechanical-sketcher.git
-
-# ディレクトリに移動
 cd mechanical-sketcher
-
-# ブラウザでindex.htmlを開く（例: VSCodeのLive Serverなど）
+npm install
+npm run dev      # 開発サーバー起動
+npm run build    # dist/ にビルド
+npm run preview  # ビルド結果の確認
 ```
 
-> **Note**: ローカルファイルとして直接開く場合、ブラウザによってはCORS制限により正常に動作しない場合があります。ローカルサーバー経由でのアクセスを推奨します。
+## デプロイ
+
+`main` ブランチへの push で GitHub Actions がビルドし、GitHub Pages にデプロイします。
+（リポジトリの Settings → Pages → Source を「GitHub Actions」に設定してください）
 
 ## ライセンス
 
