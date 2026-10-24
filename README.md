@@ -75,11 +75,6 @@ npm run build    # dist/ にビルド
 npm run preview  # ビルド結果の確認
 ```
 
-## デプロイ
-
-`main` ブランチへの push で GitHub Actions がビルドし、GitHub Pages にデプロイします。
-（リポジトリの Settings → Pages → Source を「GitHub Actions」に設定してください）
-
 ## ライセンス
 
 [MIT License](LICENSE)
